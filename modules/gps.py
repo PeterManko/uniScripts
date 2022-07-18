@@ -5,7 +5,7 @@ import re
 import csv
 from os.path import exists
 
-
+# preparing file to import from
 def getFile():
     
     fileToProcess = input('Enter file location for processing: ')
@@ -21,7 +21,7 @@ def getFile():
     fileToProcess = csv.reader(fileToProcess)
 
     return fileToProcess
-
+# getting data out from file
 def getData(fileToProcess):
 
     # read header and data
@@ -43,6 +43,7 @@ def getData(fileToProcess):
         rows.append(row)
     return rows, header
 
+# calculating all gps coordinates
 def compute(rows):
     # perform calculations
     for row in rows:
@@ -54,6 +55,7 @@ def compute(rows):
 
     return rows
 
+# formatting data for output
 def formatData(rows):
 
     # format vals for output
@@ -64,7 +66,7 @@ def formatData(rows):
             row[i]+= (9-len((row[i].split('.'))[1])) * '0'
 
     return rows
-
+# writing data into file
 def outputFile(header, rows):
     outputFile = input('Enter output file path: ')
 
@@ -78,12 +80,39 @@ def outputFile(header, rows):
         # write multiple rows
         writer.writerows(rows)
     return True
-file = getFile()
 
-rows, header = getData(file)
+# writing data into StdOut
+def outputToStdOut(header, rows):
+    for item in header:
+        print(item, end=" ")
 
-rows = compute(rows)
+    for row in rows:
+        for item in row:
+            print(item, end=" ")
 
-rows = formatData(rows)
 
-outputFile(header, rows)
+# methods used by main program
+
+# full conversion into file
+def covertToFile():
+
+    file = getFile()
+
+    rows, header = getData(file)
+
+    rows = compute(rows)
+
+    rows = formatData(rows)
+
+    outputFile(header, rows)
+# full conversion into StdOut
+def convertToStdOut():
+    file = getFile()
+
+    rows, header = getData(file)
+
+    rows = compute(rows)
+
+    rows = formatData(rows)
+
+    outputToStdOut(header, rows)
